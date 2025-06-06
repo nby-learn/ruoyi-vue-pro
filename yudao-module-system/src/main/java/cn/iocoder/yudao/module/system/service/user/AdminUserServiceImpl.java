@@ -12,7 +12,6 @@ import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.common.util.validation.ValidationUtils;
 import cn.iocoder.yudao.framework.datapermission.core.util.DataPermissionUtils;
 import cn.iocoder.yudao.module.infra.api.config.ConfigApi;
-import cn.iocoder.yudao.module.infra.api.file.FileApi;
 import cn.iocoder.yudao.module.system.controller.admin.auth.vo.AuthRegisterReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.user.vo.profile.UserProfileUpdatePasswordReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.user.vo.profile.UserProfileUpdateReqVO;
@@ -260,13 +259,13 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public PageResult<AdminUserDO> getUserPage(UserPageReqVO reqVO) {
+    public PageResult<AdminUserDO> getUserPage(UserPageReqVO reqVO, boolean isAdmin) {
         // 如果有角色编号，查询角色对应的用户编号
         Set<Long> userIds = reqVO.getRoleId() != null ?
                 permissionService.getUserRoleIdListByRoleId(singleton(reqVO.getRoleId())) : null;
 
         // 分页查询
-        return userMapper.selectPage(reqVO, getDeptCondition(reqVO.getDeptId()), userIds);
+        return userMapper.selectPage(reqVO, getDeptCondition(reqVO.getDeptId()), userIds, isAdmin);
     }
 
     @Override

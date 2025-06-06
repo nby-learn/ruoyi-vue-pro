@@ -7,6 +7,8 @@ import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
+import cn.iocoder.yudao.framework.security.core.LoginUser;
+import cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils;
 import cn.iocoder.yudao.module.system.controller.admin.user.vo.user.*;
 import cn.iocoder.yudao.module.system.convert.user.UserConvert;
 import cn.iocoder.yudao.module.system.dal.dataobject.dept.DeptDO;
@@ -92,7 +94,10 @@ public class UserController {
     @PreAuthorize("@ss.hasPermission('system:user:query')")
     public CommonResult<PageResult<UserRespVO>> getUserPage(@Valid UserPageReqVO pageReqVO) {
         // 获得用户分页列表
-        PageResult<AdminUserDO> pageResult = userService.getUserPage(pageReqVO);
+        LoginUser user = SecurityFrameworkUtils.getLoginUser();
+        boolean isAdmin =  user != null && user.getId() == 1;
+
+        PageResult<AdminUserDO> pageResult = userService.getUserPage(pageReqVO, isAdmin);
         if (CollUtil.isEmpty(pageResult.getList())) {
             return success(new PageResult<>(pageResult.getTotal()));
         }
@@ -134,7 +139,7 @@ public class UserController {
     public void exportUserList(@Validated UserPageReqVO exportReqVO,
                                HttpServletResponse response) throws IOException {
         exportReqVO.setPageSize(PageParam.PAGE_SIZE_NONE);
-        List<AdminUserDO> list = userService.getUserPage(exportReqVO).getList();
+        List<AdminUserDO> list = userService.getUserPage(exportReqVO, true).getList();
         // 输出 Excel
         Map<Long, DeptDO> deptMap = deptService.getDeptMap(
                 convertList(list, AdminUserDO::getDeptId));

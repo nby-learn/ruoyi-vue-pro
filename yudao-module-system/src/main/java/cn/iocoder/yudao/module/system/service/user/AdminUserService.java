@@ -117,7 +117,7 @@ public interface AdminUserService {
      * @param reqVO 分页条件
      * @return 分页列表
      */
-    PageResult<AdminUserDO> getUserPage(UserPageReqVO reqVO);
+    PageResult<AdminUserDO> getUserPage(UserPageReqVO reqVO, boolean isAdmin);
 
     /**
      * 通过用户 ID 查询用户

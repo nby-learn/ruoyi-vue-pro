@@ -25,7 +25,7 @@ public interface AdminUserMapper extends BaseMapperX<AdminUserDO> {
         return selectOne(AdminUserDO::getMobile, mobile);
     }
 
-    default PageResult<AdminUserDO> selectPage(UserPageReqVO reqVO, Collection<Long> deptIds, Collection<Long> userIds) {
+    default PageResult<AdminUserDO> selectPage(UserPageReqVO reqVO, Collection<Long> deptIds, Collection<Long> userIds, boolean isAdmin) {
         return selectPage(reqVO, new LambdaQueryWrapperX<AdminUserDO>()
                 .likeIfPresent(AdminUserDO::getUsername, reqVO.getUsername())
                 .likeIfPresent(AdminUserDO::getMobile, reqVO.getMobile())
@@ -33,6 +33,7 @@ public interface AdminUserMapper extends BaseMapperX<AdminUserDO> {
                 .betweenIfPresent(AdminUserDO::getCreateTime, reqVO.getCreateTime())
                 .inIfPresent(AdminUserDO::getDeptId, deptIds)
                 .inIfPresent(AdminUserDO::getId, userIds)
+                .ne(!isAdmin, AdminUserDO::getId, 1)
                 .orderByDesc(AdminUserDO::getId));
     }
 

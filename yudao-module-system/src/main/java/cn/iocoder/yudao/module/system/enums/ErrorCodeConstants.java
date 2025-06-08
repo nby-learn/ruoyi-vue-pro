@@ -168,4 +168,6 @@ public interface ErrorCodeConstants {
     // ========== 站内信发送 1-002-028-000 ==========
     ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1_002_028_000, "模板参数({})缺失");
 
+    // ========== 文章评论 1-040-011-002 ==========
+    ErrorCode ARTICLE_COMMENT_NOT_EXISTS = new ErrorCode(1_040_011_002, "文章评论不存在");
 }

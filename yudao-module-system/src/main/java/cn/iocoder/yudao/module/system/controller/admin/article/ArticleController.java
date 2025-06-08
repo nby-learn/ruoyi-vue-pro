@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.system.controller.app;
+package cn.iocoder.yudao.module.system.controller.admin.article;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
@@ -26,9 +26,9 @@ public class ArticleController {
     @Resource
     private OilArticleService oilArticleService;
 
-    @GetMapping("/page")
+    @PostMapping("/page")
     @Operation(summary = "获得文章分页")
-    public CommonResult<PageResult<OilArticleRespVO>> getOilArticlePage(@Valid OilArticlePageReqVO pageReqVO) {
+    public CommonResult<PageResult<OilArticleRespVO>> getOilArticlePage(@Valid @RequestBody OilArticlePageReqVO pageReqVO) {
         PageResult<OilArticleDO> pageResult = oilArticleService.getOilArticlePage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, OilArticleRespVO.class));
     }

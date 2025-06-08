@@ -1,12 +1,12 @@
 package cn.iocoder.yudao.module.system.dal.dataobject.oilarticle;
 
-import lombok.*;
-import java.util.*;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.*;
 import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 /**
  * 文章 DO
@@ -52,6 +52,9 @@ public class OilArticleDO extends BaseDO {
      * 上级名称
      */
     private String fthName;
-
+    /**
+     * 状态：0待审核，1审核通过，2拒绝
+     */
+    private Integer status;
 
 }

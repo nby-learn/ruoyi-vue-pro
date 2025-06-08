@@ -1,10 +1,10 @@
 package cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo;
 
-import lombok.*;
-import java.util.*;
-import io.swagger.v3.oas.annotations.media.Schema;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 
 import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
@@ -35,5 +35,11 @@ public class OilArticlePageReqVO extends PageParam {
 
     @Schema(description = "上级名称", example = "赵六")
     private String fthName;
+
+    /**
+     * 状态：0待审核，1审核通过，2拒绝
+     */
+    @Schema(description = "状态：0待审核，1审核通过，2拒绝", example = "0")
+    private Integer status;
 
 }

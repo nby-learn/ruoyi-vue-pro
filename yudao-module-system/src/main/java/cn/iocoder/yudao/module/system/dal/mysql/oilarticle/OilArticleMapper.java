@@ -17,6 +17,7 @@ public interface OilArticleMapper extends BaseMapperX<OilArticleDO> {
 
     default PageResult<OilArticleDO> selectPage(OilArticlePageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<OilArticleDO>()
+                .eqIfPresent(OilArticleDO::getStatus, reqVO.getStatus())
                 .eqIfPresent(OilArticleDO::getFthId, reqVO.getFthId())
                 .eqIfPresent(OilArticleDO::getTitle, reqVO.getTitle())
                 .eqIfPresent(OilArticleDO::getSource, reqVO.getSource())

@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.module.system.controller.admin.article;
+package cn.iocoder.yudao.module.system.controller.admin.oilarticle;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
@@ -7,10 +7,12 @@ import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticleP
 import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticleRespVO;
 import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticleSaveReqVO;
 import cn.iocoder.yudao.module.system.dal.dataobject.oilarticle.OilArticleDO;
+import cn.iocoder.yudao.module.system.enums.article.ArticleStatusEnum;
 import cn.iocoder.yudao.module.system.service.oilarticle.OilArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +23,16 @@ import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 @RestController
 @RequestMapping("/app/oil-article")
 @Validated
-public class ArticleController {
+public class AppArticleController {
 
     @Resource
     private OilArticleService oilArticleService;
 
     @PostMapping("/page")
     @Operation(summary = "获得文章分页")
+    @PermitAll
     public CommonResult<PageResult<OilArticleRespVO>> getOilArticlePage(@Valid @RequestBody OilArticlePageReqVO pageReqVO) {
+        pageReqVO.setStatus(ArticleStatusEnum.ACCESS.getStatus());
         PageResult<OilArticleDO> pageResult = oilArticleService.getOilArticlePage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, OilArticleRespVO.class));
     }

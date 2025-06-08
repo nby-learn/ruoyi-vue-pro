@@ -1,13 +1,11 @@
 package cn.iocoder.yudao.module.system.dal.mysql.oilarticle;
 
-import java.util.*;
-
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticlePageReqVO;
 import cn.iocoder.yudao.module.system.dal.dataobject.oilarticle.OilArticleDO;
 import org.apache.ibatis.annotations.Mapper;
-import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.*;
 
 /**
  * 文章 Mapper

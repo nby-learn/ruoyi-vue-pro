@@ -1,11 +1,11 @@
 package cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo;
 
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-import java.util.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Data;
+
 import java.time.LocalDateTime;
-import com.alibaba.excel.annotation.*;
 
 @Schema(description = "管理后台 - 文章 Response VO")
 @Data
@@ -43,5 +43,9 @@ public class OilArticleRespVO {
     @Schema(description = "上级名称", example = "赵六")
     @ExcelProperty("上级名称")
     private String fthName;
+
+    @Schema(description = "审核状态", example = "赵六")
+    @ExcelProperty("审核状态")
+    private Integer status;
 
 }

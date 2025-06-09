@@ -67,6 +67,7 @@ public class ArticleCommentController {
     @Parameter(name = "ids", description = "编号", required = true)
     @Operation(summary = "批量删除文章评论")
                 @PreAuthorize("@ss.hasPermission('system:article-comment:delete')")
+    @TenantIgnore
     public CommonResult<Boolean> deleteArticleCommentList(@RequestParam("ids") List<Integer> ids) {
         articleCommentService.deleteArticleCommentListByIds(ids);
         return success(true);

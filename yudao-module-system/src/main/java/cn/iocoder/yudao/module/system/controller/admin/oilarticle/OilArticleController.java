@@ -1,33 +1,32 @@
 package cn.iocoder.yudao.module.system.controller.admin.oilarticle;
 
-import org.springframework.web.bind.annotation.*;
-import jakarta.annotation.Resource;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.security.access.prepost.PreAuthorize;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Operation;
-
-import jakarta.validation.constraints.*;
-import jakarta.validation.*;
-import jakarta.servlet.http.*;
-import java.util.*;
-import java.io.IOException;
-
+import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-
-import cn.iocoder.yudao.framework.apilog.core.annotation.ApiAccessLog;
-import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.*;
-
-import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.*;
+import cn.iocoder.yudao.framework.tenant.core.aop.TenantIgnore;
+import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticlePageReqVO;
+import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticleRespVO;
+import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticleSaveReqVO;
 import cn.iocoder.yudao.module.system.dal.dataobject.oilarticle.OilArticleDO;
 import cn.iocoder.yudao.module.system.service.oilarticle.OilArticleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
+
+import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.EXPORT;
+import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 文章")
 @RestController
@@ -48,6 +47,7 @@ public class OilArticleController {
     @PutMapping("/update")
     @Operation(summary = "更新文章")
     @PreAuthorize("@ss.hasPermission('system:oil-article:update')")
+    @TenantIgnore
     public CommonResult<Boolean> updateOilArticle(@Valid @RequestBody OilArticleSaveReqVO updateReqVO) {
         oilArticleService.updateOilArticle(updateReqVO);
         return success(true);
@@ -57,6 +57,7 @@ public class OilArticleController {
     @Operation(summary = "删除文章")
     @Parameter(name = "id", description = "编号", required = true)
     @PreAuthorize("@ss.hasPermission('system:oil-article:delete')")
+    @TenantIgnore
     public CommonResult<Boolean> deleteOilArticle(@RequestParam("id") Integer id) {
         oilArticleService.deleteOilArticle(id);
         return success(true);
@@ -66,6 +67,7 @@ public class OilArticleController {
     @Parameter(name = "ids", description = "编号", required = true)
     @Operation(summary = "批量删除文章")
                 @PreAuthorize("@ss.hasPermission('system:oil-article:delete')")
+    @TenantIgnore
     public CommonResult<Boolean> deleteOilArticleList(@RequestParam("ids") List<Integer> ids) {
         oilArticleService.deleteOilArticleListByIds(ids);
         return success(true);
@@ -83,6 +85,7 @@ public class OilArticleController {
     @GetMapping("/page")
     @Operation(summary = "获得文章分页")
     @PreAuthorize("@ss.hasPermission('system:oil-article:query')")
+    @TenantIgnore
     public CommonResult<PageResult<OilArticleRespVO>> getOilArticlePage(@Valid OilArticlePageReqVO pageReqVO) {
         PageResult<OilArticleDO> pageResult = oilArticleService.getOilArticlePage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, OilArticleRespVO.class));

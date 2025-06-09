@@ -1,7 +1,6 @@
 package cn.iocoder.yudao.module.system.controller.admin.articlecomment.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -15,11 +14,11 @@ public class ArticleCommentSaveReqVO {
     private Integer id;
 
     @Schema(description = "评论人名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "张三")
-    @NotEmpty(message = "评论人名称不能为空")
+//    @NotEmpty(message = "评论人名称不能为空")
     private String name;
 
     @Schema(description = "评论人id", requiredMode = Schema.RequiredMode.REQUIRED, example = "15755")
-    @NotNull(message = "评论人id不能为空")
+//    @NotNull(message = "评论人id不能为空")
     private Integer userId;
 
     @Schema(description = "用户id")
@@ -33,7 +32,7 @@ public class ArticleCommentSaveReqVO {
     private Integer status;
 
     @Schema(description = "文章id", requiredMode = Schema.RequiredMode.REQUIRED, example = "20752")
-    @NotNull(message = "文章id不能为空")
+//    @NotNull(message = "文章id不能为空")
     private Integer articleId;
 
     @Schema(description = "文章标题", requiredMode = Schema.RequiredMode.REQUIRED, example = "20752")

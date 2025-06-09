@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.system.controller.admin.oilarticle;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.framework.tenant.core.aop.TenantIgnore;
 import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticlePageReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticleRespVO;
 import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticleSaveReqVO;
@@ -31,6 +32,7 @@ public class AppArticleController {
     @PostMapping("/page")
     @Operation(summary = "获得文章分页")
     @PermitAll
+    @TenantIgnore
     public CommonResult<PageResult<OilArticleRespVO>> getOilArticlePage(@Valid @RequestBody OilArticlePageReqVO pageReqVO) {
         pageReqVO.setStatus(ArticleStatusEnum.ACCESS.getStatus());
         PageResult<OilArticleDO> pageResult = oilArticleService.getOilArticlePage(pageReqVO);

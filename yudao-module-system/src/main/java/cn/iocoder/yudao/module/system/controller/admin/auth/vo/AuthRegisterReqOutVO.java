@@ -19,10 +19,10 @@ public class AuthRegisterReqOutVO {
     @Size(min = 4, max = 30, message = "用户账号长度为 4-30 个字符")
     private String username;
 
-    @Schema(description = "用户昵称", requiredMode = Schema.RequiredMode.REQUIRED, example = "芋艿")
-    @NotBlank(message = "用户昵称不能为空")
-    @Size(max = 30, message = "用户昵称长度不能超过 30 个字符")
-    private String nickname;
+    @Schema(description = "组织名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "三亚崖州科技城")
+    @NotBlank(message = "组织名称不能为空")
+    @Size(max = 30, message = "组织名称长度不能超过 30 个字符")
+    private String organization;
 
     @Schema(description = "密码", requiredMode = Schema.RequiredMode.REQUIRED, example = "123456")
     @NotEmpty(message = "密码不能为空")

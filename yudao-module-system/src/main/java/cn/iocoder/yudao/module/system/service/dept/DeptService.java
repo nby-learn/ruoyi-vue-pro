@@ -4,6 +4,8 @@ import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
 import cn.iocoder.yudao.module.system.controller.admin.dept.vo.dept.DeptListReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.dept.vo.dept.DeptSaveReqVO;
 import cn.iocoder.yudao.module.system.dal.dataobject.dept.DeptDO;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.*;
 
@@ -114,4 +116,10 @@ public interface DeptService {
      */
     void validateDeptList(Collection<Long> ids);
 
+    /**
+     * 根据名称获取部门列表
+     * @param organization
+     * @return
+     */
+    List<DeptDO> getDept(@NotBlank(message = "组织名称不能为空") @Size(max = 30, message = "组织名称长度不能超过 30 个字符") String organization);
 }

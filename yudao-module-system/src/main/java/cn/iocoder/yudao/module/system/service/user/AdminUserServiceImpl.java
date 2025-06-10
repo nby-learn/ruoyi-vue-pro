@@ -13,7 +13,9 @@ import cn.iocoder.yudao.framework.common.util.validation.ValidationUtils;
 import cn.iocoder.yudao.framework.datapermission.core.util.DataPermissionUtils;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.module.infra.api.config.ConfigApi;
+import cn.iocoder.yudao.module.system.controller.admin.auth.vo.AuthRegisterReqOutVO;
 import cn.iocoder.yudao.module.system.controller.admin.auth.vo.AuthRegisterReqVO;
+import cn.iocoder.yudao.module.system.controller.admin.dept.vo.dept.DeptSaveReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.user.vo.profile.UserProfileUpdatePasswordReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.user.vo.profile.UserProfileUpdateReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.user.vo.user.UserImportExcelVO;
@@ -134,6 +136,33 @@ public class AdminUserServiceImpl implements AdminUserService {
         AdminUserDO user = BeanUtils.toBean(registerReqVO, AdminUserDO.class);
         user.setStatus(CommonStatusEnum.ENABLE.getStatus()); // 默认开启
         user.setPassword(encodePassword(registerReqVO.getPassword())); // 加密密码
+        userMapper.insert(user);
+        return user.getId();
+    }
+
+    @Override
+    public Long registerUser(AuthRegisterReqOutVO registerReqVO) {
+        // 1. 获取部门id
+        List<DeptDO> deptDOList = deptService.getDept(registerReqVO.getOrganization());
+        Long deptId = 0L;
+        if (deptDOList == null) {
+            // 创建部门
+            DeptSaveReqVO deptSaveReqVO = new DeptSaveReqVO();
+            deptSaveReqVO.setName(registerReqVO.getOrganization());
+            deptSaveReqVO.setParentId(DeptDO.FIRST_PARENT_ID_ROOT);
+            deptSaveReqVO.setStatus(CommonStatusEnum.ENABLE.getStatus());
+            deptSaveReqVO.setStatus(1);
+            deptId = deptService.createDept(deptSaveReqVO);
+        } else {
+            deptId = deptDOList.get(0).getId();
+        }
+        // 2. 插入用户
+        AdminUserDO user = AdminUserDO.builder()
+                .username(registerReqVO.getUsername())
+                .status(CommonStatusEnum.DISABLE.getStatus())
+                .password(passwordEncoder.encode(registerReqVO.getPassword()))
+                .deptId(deptId)
+                .build();
         userMapper.insert(user);
         return user.getId();
     }
@@ -343,7 +372,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     private AdminUserDO validateUserForCreateOrUpdate(Long id, String username, String mobile, String email,
-                                               Long deptId, Set<Long> postIds) {
+                                                      Long deptId, Set<Long> postIds) {
         // 关闭数据权限，避免因为没有数据权限，查询不到数据，进而导致唯一校验不正确
         return DataPermissionUtils.executeIgnore(() -> {
             // 校验用户存在
@@ -430,6 +459,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     /**
      * 校验旧密码
+     *
      * @param id          用户 id
      * @param oldPassword 旧密码
      */
@@ -464,7 +494,7 @@ public class AdminUserServiceImpl implements AdminUserService {
             // 2.1.1 校验字段是否符合要求
             try {
                 ValidationUtils.validate(BeanUtils.toBean(importUser, UserSaveReqVO.class).setPassword(initPassword));
-            } catch (ConstraintViolationException ex){
+            } catch (ConstraintViolationException ex) {
                 respVO.getFailureUsernames().put(importUser.getUsername(), ex.getMessage());
                 return;
             }

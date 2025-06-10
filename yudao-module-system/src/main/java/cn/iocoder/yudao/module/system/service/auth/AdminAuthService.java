@@ -90,5 +90,5 @@ public interface AdminAuthService {
      * @param registerReqVO
      * @return
      */
-    AuthLoginRespVO register(@Valid AuthRegisterReqOutVO registerReqVO);
+    Long register(@Valid AuthRegisterReqOutVO registerReqVO);
 }

@@ -22,6 +22,7 @@ import lombok.EqualsAndHashCode;
 public class DeptDO extends TenantBaseDO {
 
     public static final Long PARENT_ID_ROOT = 0L;
+    public static final Long FIRST_PARENT_ID_ROOT = 100L;
 
     /**
      * 部门ID

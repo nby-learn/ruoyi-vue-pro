@@ -6,6 +6,7 @@ import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.util.monitor.TracerUtils;
 import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
 import cn.iocoder.yudao.framework.common.util.validation.ValidationUtils;
+import cn.iocoder.yudao.framework.datapermission.core.util.DataPermissionUtils;
 import cn.iocoder.yudao.module.system.api.logger.dto.LoginLogCreateReqDTO;
 import cn.iocoder.yudao.module.system.api.sms.SmsCodeApi;
 import cn.iocoder.yudao.module.system.api.sms.dto.code.SmsCodeUseReqDTO;
@@ -275,14 +276,21 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     }
 
     @Override
-    public AuthLoginRespVO register(AuthRegisterReqOutVO registerReqVO) {
-        String username = registerReqVO.getUsername();
-        int count = this.userService.countUsersByUsername(username);
-        if(count > 0){
-            throw exception(USER_USERNAME_EXISTS);
-        }
-        // 注册用户
-        return null;
+    public Long register(AuthRegisterReqOutVO registerReqVO) {
+        // 关闭数据权限，避免因为没有数据权限，查询不到数据，进而导致唯一校验不正确
+        return DataPermissionUtils.executeIgnore(() -> {
+            String username = registerReqVO.getUsername();
+            int count = this.userService.countUsersByUsername(username);
+            if(count > 0){
+                throw exception(USER_USERNAME_EXISTS);
+            }
+            Long id = this.userService.registerUser(registerReqVO);
+            if(id.intValue() == -1){
+                throw exception(USER_USERNAME_EXISTS);
+            }else{
+                return id;
+            }
+        });
     }
 
     @VisibleForTesting

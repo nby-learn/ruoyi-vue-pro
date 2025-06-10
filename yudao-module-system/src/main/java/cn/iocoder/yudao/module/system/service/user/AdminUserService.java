@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.system.service.user;
 import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
+import cn.iocoder.yudao.module.system.controller.admin.auth.vo.AuthRegisterReqOutVO;
 import cn.iocoder.yudao.module.system.controller.admin.auth.vo.AuthRegisterReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.user.vo.profile.UserProfileUpdatePasswordReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.user.vo.profile.UserProfileUpdateReqVO;
@@ -213,4 +214,10 @@ public interface AdminUserService {
      * @return
      */
     int countUsersByUsername(String username);
+
+    /**
+     * 注册用户
+      * @param registerReqVO
+     */
+    Long registerUser(AuthRegisterReqOutVO registerReqVO);
 }

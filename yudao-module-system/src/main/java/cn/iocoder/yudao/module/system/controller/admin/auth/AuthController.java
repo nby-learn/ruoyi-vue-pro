@@ -120,7 +120,7 @@ public class AuthController {
     @PermitAll
     @Operation(summary = "注册用户")
     @TenantIgnore
-    public CommonResult<AuthLoginRespVO> registerOut(@RequestBody @Valid AuthRegisterReqOutVO registerReqVO) {
+    public CommonResult<Long> registerOut(@RequestBody @Valid AuthRegisterReqOutVO registerReqVO) {
         return success(authService.register(registerReqVO));
     }
 

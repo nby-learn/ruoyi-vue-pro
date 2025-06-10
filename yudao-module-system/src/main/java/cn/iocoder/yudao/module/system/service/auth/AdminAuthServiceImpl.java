@@ -274,6 +274,17 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         return createTokenAfterLoginSuccess(userId, registerReqVO.getUsername(), LoginLogTypeEnum.LOGIN_USERNAME);
     }
 
+    @Override
+    public AuthLoginRespVO register(AuthRegisterReqOutVO registerReqVO) {
+        String username = registerReqVO.getUsername();
+        int count = this.userService.countUsersByUsername(username);
+        if(count > 0){
+            throw exception(USER_USERNAME_EXISTS);
+        }
+        // 注册用户
+        return null;
+    }
+
     @VisibleForTesting
     void validateCaptcha(AuthRegisterReqVO reqVO) {
         ResponseModel response = doValidateCaptcha(reqVO);

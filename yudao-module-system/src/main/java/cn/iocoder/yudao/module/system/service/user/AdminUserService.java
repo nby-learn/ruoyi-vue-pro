@@ -207,4 +207,10 @@ public interface AdminUserService {
      */
     boolean isPasswordMatch(String rawPassword, String encodedPassword);
 
+    /**
+     * 获取该账号对应的用户个数
+     * @param username
+     * @return
+     */
+    int countUsersByUsername(String username);
 }

@@ -7,6 +7,7 @@ import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.security.config.SecurityProperties;
 import cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils;
+import cn.iocoder.yudao.framework.tenant.core.aop.TenantIgnore;
 import cn.iocoder.yudao.module.system.controller.admin.auth.vo.*;
 import cn.iocoder.yudao.module.system.convert.auth.AuthConvert;
 import cn.iocoder.yudao.module.system.dal.dataobject.permission.MenuDO;
@@ -115,12 +116,20 @@ public class AuthController {
         return success(AuthConvert.INSTANCE.convert(user, roles, menuList));
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registerOut")
     @PermitAll
     @Operation(summary = "注册用户")
-    public CommonResult<AuthLoginRespVO> register(@RequestBody @Valid AuthRegisterReqVO registerReqVO) {
+    @TenantIgnore
+    public CommonResult<AuthLoginRespVO> registerOut(@RequestBody @Valid AuthRegisterReqOutVO registerReqVO) {
         return success(authService.register(registerReqVO));
     }
+
+//    @PostMapping("/register")
+//    @PermitAll
+//    @Operation(summary = "注册用户")
+//    public CommonResult<AuthLoginRespVO> register(@RequestBody @Valid AuthRegisterReqVO registerReqVO) {
+//        return success(authService.register(registerReqVO));
+//    }
 
     // ========== 短信登录相关 ==========
 

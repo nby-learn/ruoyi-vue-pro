@@ -85,4 +85,10 @@ public interface AdminAuthService {
      */
     void resetPassword(AuthResetPasswordReqVO reqVO);
 
+    /**
+     * 前台注册
+     * @param registerReqVO
+     * @return
+     */
+    AuthLoginRespVO register(@Valid AuthRegisterReqOutVO registerReqVO);
 }

@@ -145,13 +145,13 @@ public class AdminUserServiceImpl implements AdminUserService {
         // 1. 获取部门id
         List<DeptDO> deptDOList = deptService.getDept(registerReqVO.getOrganization());
         Long deptId = 0L;
-        if (deptDOList == null) {
+        if (deptDOList == null || deptDOList.isEmpty()) {
             // 创建部门
             DeptSaveReqVO deptSaveReqVO = new DeptSaveReqVO();
             deptSaveReqVO.setName(registerReqVO.getOrganization());
             deptSaveReqVO.setParentId(DeptDO.FIRST_PARENT_ID_ROOT);
             deptSaveReqVO.setStatus(CommonStatusEnum.ENABLE.getStatus());
-            deptSaveReqVO.setStatus(1);
+            deptSaveReqVO.setStatus(0);
             deptId = deptService.createDept(deptSaveReqVO);
         } else {
             deptId = deptDOList.get(0).getId();
@@ -160,9 +160,11 @@ public class AdminUserServiceImpl implements AdminUserService {
         AdminUserDO user = AdminUserDO.builder()
                 .username(registerReqVO.getUsername())
                 .status(CommonStatusEnum.DISABLE.getStatus())
+                .nickname(registerReqVO.getUsername())
                 .password(passwordEncoder.encode(registerReqVO.getPassword()))
                 .deptId(deptId)
                 .build();
+        user.setTenantId(1L);
         userMapper.insert(user);
         return user.getId();
     }

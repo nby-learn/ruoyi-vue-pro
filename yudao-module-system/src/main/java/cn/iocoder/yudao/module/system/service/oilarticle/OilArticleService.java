@@ -1,11 +1,12 @@
 package cn.iocoder.yudao.module.system.service.oilarticle;
 
-import java.util.*;
-import jakarta.validation.*;
-import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.*;
-import cn.iocoder.yudao.module.system.dal.dataobject.oilarticle.OilArticleDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticlePageReqVO;
+import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticleSaveReqVO;
+import cn.iocoder.yudao.module.system.dal.dataobject.oilarticle.OilArticleDO;
+import jakarta.validation.Valid;
+
+import java.util.List;
 
 /**
  * 文章 Service 接口
@@ -59,4 +60,9 @@ public interface OilArticleService {
      */
     PageResult<OilArticleDO> getOilArticlePage(OilArticlePageReqVO pageReqVO);
 
+    String getPubText1(Integer id);
+
+    String getPubText2(Integer id);
+
+    String getPriText2(Integer id);
 }

@@ -79,7 +79,14 @@ public class OilArticleController {
     @PreAuthorize("@ss.hasPermission('system:oil-article:query')")
     public CommonResult<OilArticleRespVO> getOilArticle(@RequestParam("id") Integer id) {
         OilArticleDO oilArticle = oilArticleService.getOilArticle(id);
-        return success(BeanUtils.toBean(oilArticle, OilArticleRespVO.class));
+        String pub1 = oilArticleService.getPubText1(id);
+        String pub2 = oilArticleService.getPubText2(id);
+        String pri1 = oilArticleService.getPriText2(id);
+        OilArticleRespVO bean = BeanUtils.toBean(oilArticle, OilArticleRespVO.class);
+        bean.setPubText1(pub1);
+        bean.setPubText2(pub2);
+        bean.setPriText1(pri1);
+        return success(bean);
     }
 
     @GetMapping("/page")

@@ -3,11 +3,16 @@ package cn.iocoder.yudao.module.system.service.oilarticle;
 import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.framework.dict.core.DictFrameworkUtils;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticlePageReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.oilarticle.vo.OilArticleSaveReqVO;
 import cn.iocoder.yudao.module.system.dal.dataobject.oilarticle.OilArticleDO;
+import cn.iocoder.yudao.module.system.dal.dataobject.oilarticledetail.OilArticleDetailDO;
 import cn.iocoder.yudao.module.system.dal.mysql.oilarticle.OilArticleMapper;
+import cn.iocoder.yudao.module.system.dal.mysql.oilarticledetail.OilArticleDetailMapper;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -28,11 +33,51 @@ public class OilArticleServiceImpl implements OilArticleService {
     @Resource
     private OilArticleMapper oilArticleMapper;
 
+    @Resource
+    private OilArticleDetailMapper oilArticleDetailMapper;
+
     @Override
     public Integer createOilArticle(OilArticleSaveReqVO createReqVO) {
         // 插入
         OilArticleDO oilArticle = BeanUtils.toBean(createReqVO, OilArticleDO.class);
+        String fthName = DictFrameworkUtils.parseDictDataLabel("article_type", oilArticle.getFthId().toString());
+        oilArticle.setFthName(fthName);
+        oilArticle.setClickCount("0");
         oilArticleMapper.insert(oilArticle);
+        // 插入正文内容
+        String pubText1 = createReqVO.getPubText1();
+        if(StringUtils.isNotBlank(pubText1)){
+            oilArticleDetailMapper.insert(
+                    OilArticleDetailDO.builder()
+                            .articleId(oilArticle.getId())
+                            .content(pubText1)
+                            .articleIndex(1)
+                            .secret(0)
+                            .build()
+            );
+        }
+        String priText1 = createReqVO.getPriText1();
+        if(StringUtils.isNotBlank(priText1)) {
+            oilArticleDetailMapper.insert(
+                    OilArticleDetailDO.builder()
+                            .articleId(oilArticle.getId())
+                            .content(priText1)
+                            .articleIndex(2)
+                            .secret(1)
+                            .build()
+            );
+        }
+        String pubText2 = createReqVO.getPubText2();
+        if(StringUtils.isNotBlank(pubText2)) {
+            oilArticleDetailMapper.insert(
+                    OilArticleDetailDO.builder()
+                            .articleId(oilArticle.getId())
+                            .content(pubText2)
+                            .articleIndex(3)
+                            .secret(0)
+                            .build()
+            );
+        }
         // 返回
         return oilArticle.getId();
     }
@@ -85,4 +130,33 @@ public class OilArticleServiceImpl implements OilArticleService {
         return oilArticleMapper.selectPage(pageReqVO);
     }
 
+    @Override
+    public String getPriText2(Integer id) {
+        List<OilArticleDetailDO> oilArticleDetailDOS = oilArticleDetailMapper.selectList(
+                new LambdaQueryWrapperX<OilArticleDetailDO>()
+                        .eq(OilArticleDetailDO::getArticleId, id)
+                        .eq(OilArticleDetailDO::getArticleIndex, 2)
+        );
+        return oilArticleDetailDOS.size() > 0 ? oilArticleDetailDOS.get(0).getContent() : "";
+    }
+
+    @Override
+    public String getPubText2(Integer id) {
+        List<OilArticleDetailDO> oilArticleDetailDOS = oilArticleDetailMapper.selectList(
+                new LambdaQueryWrapperX<OilArticleDetailDO>()
+                        .eq(OilArticleDetailDO::getArticleId, id)
+                        .eq(OilArticleDetailDO::getArticleIndex, 3)
+        );
+        return oilArticleDetailDOS.size() > 0 ? oilArticleDetailDOS.get(0).getContent() : "";
+    }
+
+    @Override
+    public String getPubText1(Integer id) {
+        List<OilArticleDetailDO> oilArticleDetailDOS = oilArticleDetailMapper.selectList(
+                new LambdaQueryWrapperX<OilArticleDetailDO>()
+                        .eq(OilArticleDetailDO::getArticleId, id)
+                        .eq(OilArticleDetailDO::getArticleIndex, 1)
+        );
+        return oilArticleDetailDOS.size() > 0 ? oilArticleDetailDOS.get(0).getContent() : "";
+    }
 }

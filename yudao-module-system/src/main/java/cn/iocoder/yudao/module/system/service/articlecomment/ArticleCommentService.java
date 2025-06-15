@@ -1,11 +1,12 @@
 package cn.iocoder.yudao.module.system.service.articlecomment;
 
-import java.util.*;
-import jakarta.validation.*;
-import cn.iocoder.yudao.module.system.controller.admin.articlecomment.vo.*;
-import cn.iocoder.yudao.module.system.dal.dataobject.articlecomment.ArticleCommentDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import cn.iocoder.yudao.module.system.controller.admin.articlecomment.vo.ArticleCommentPageReqVO;
+import cn.iocoder.yudao.module.system.controller.admin.articlecomment.vo.ArticleCommentSaveReqVO;
+import cn.iocoder.yudao.module.system.dal.dataobject.articlecomment.ArticleCommentDO;
+import jakarta.validation.Valid;
+
+import java.util.List;
 
 /**
  * 文章评论 Service 接口
@@ -59,4 +60,5 @@ public interface ArticleCommentService {
      */
     PageResult<ArticleCommentDO> getArticleCommentPage(ArticleCommentPageReqVO pageReqVO);
 
+    PageResult<ArticleCommentDO> getAppArticleCommentPage(@Valid ArticleCommentPageReqVO pageReqVO);
 }

@@ -3,6 +3,9 @@ package cn.iocoder.yudao.module.system.service.articlecomment;
 import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import cn.iocoder.yudao.framework.security.core.LoginUser;
+import cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils;
 import cn.iocoder.yudao.module.system.controller.admin.articlecomment.vo.ArticleCommentPageReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.articlecomment.vo.ArticleCommentSaveReqVO;
 import cn.iocoder.yudao.module.system.dal.dataobject.articlecomment.ArticleCommentDO;
@@ -11,6 +14,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
@@ -32,6 +36,13 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     public Integer createArticleComment(ArticleCommentSaveReqVO createReqVO) {
         // 插入
         ArticleCommentDO articleComment = BeanUtils.toBean(createReqVO, ArticleCommentDO.class);
+        Long id = SecurityFrameworkUtils.getLoginUserId();
+        String name = SecurityFrameworkUtils.getLoginUserNickname();
+        assert id != null;
+        assert name != null;
+        articleComment.setUserId(id.intValue());
+        articleComment.setName(name);
+        articleComment.setCommentTime(LocalDateTime.now());
         articleCommentMapper.insert(articleComment);
         // 返回
         return articleComment.getId();
@@ -85,4 +96,16 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         return articleCommentMapper.selectPage(pageReqVO);
     }
 
+    @Override
+    public PageResult<ArticleCommentDO> getAppArticleCommentPage(ArticleCommentPageReqVO pageReqVO) {
+        LoginUser user = SecurityFrameworkUtils.getLoginUser();
+        if (user == null) {
+            return new PageResult<>();
+        }
+
+        return articleCommentMapper.selectPage(pageReqVO, new LambdaQueryWrapperX<ArticleCommentDO>()
+                .eq(ArticleCommentDO::getStatus, 1)
+                .eq(ArticleCommentDO::getArticleId, pageReqVO.getArticleId())
+                .orderByDesc(ArticleCommentDO::getId));
+    }
 }

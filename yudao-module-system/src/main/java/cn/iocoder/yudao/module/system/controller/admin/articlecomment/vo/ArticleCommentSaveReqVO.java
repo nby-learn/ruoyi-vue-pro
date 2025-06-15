@@ -1,7 +1,6 @@
 package cn.iocoder.yudao.module.system.controller.admin.articlecomment.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -28,7 +27,7 @@ public class ArticleCommentSaveReqVO {
     private String commentContent;
 
     @Schema(description = "审核状态：0未审核，1已通过，2已拒绝", requiredMode = Schema.RequiredMode.REQUIRED, example = "2")
-    @NotNull(message = "审核状态：0未审核，1已通过，2已拒绝不能为空")
+//    @NotNull(message = "审核状态：0未审核，1已通过，2已拒绝不能为空")
     private Integer status;
 
     @Schema(description = "文章id", requiredMode = Schema.RequiredMode.REQUIRED, example = "20752")
@@ -36,6 +35,6 @@ public class ArticleCommentSaveReqVO {
     private Integer articleId;
 
     @Schema(description = "文章标题", requiredMode = Schema.RequiredMode.REQUIRED, example = "20752")
-    private Integer articleTitle;
+    private String articleTitle;
 
 }

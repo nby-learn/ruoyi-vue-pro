@@ -71,4 +71,5 @@ public interface ErrorCodeConstants {
 
     // ========== 文章 1-001-202-000 ==========
     ErrorCode OIL_ARTICLE_NOT_EXISTS = new ErrorCode(1_001_202_000, "文章不存在");
+    ErrorCode OIL_ARTICLE_DETAIL_NOT_EXISTS = new ErrorCode(1_001_203_000, "文章不存在");
 }

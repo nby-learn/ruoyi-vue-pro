@@ -30,7 +30,15 @@ public class OilArticleSaveReqVO {
     @Schema(description = "上级名称", example = "赵六")
     private String fthName;
 
-    @Schema(description = "上级名称", example = "赵六")
+    @Schema(description = "状态", example = "赵六")
     private Integer status;
 
+    @Schema(description = "公开段落一", example = "赵六")
+    private String pubText1;
+
+    @Schema(description = "加密段落一", example = "赵六")
+    private String priText1;
+
+    @Schema(description = "公开段落二", example = "赵六")
+    private String pubText2;
 }

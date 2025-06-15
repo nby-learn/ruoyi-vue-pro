@@ -46,7 +46,7 @@ public class OilArticleServiceImpl implements OilArticleService {
         oilArticleMapper.insert(oilArticle);
         // 插入正文内容
         String pubText1 = createReqVO.getPubText1();
-        if(StringUtils.isNotBlank(pubText1)){
+        if (StringUtils.isNotBlank(pubText1)) {
             oilArticleDetailMapper.insert(
                     OilArticleDetailDO.builder()
                             .articleId(oilArticle.getId())
@@ -57,7 +57,7 @@ public class OilArticleServiceImpl implements OilArticleService {
             );
         }
         String priText1 = createReqVO.getPriText1();
-        if(StringUtils.isNotBlank(priText1)) {
+        if (StringUtils.isNotBlank(priText1)) {
             oilArticleDetailMapper.insert(
                     OilArticleDetailDO.builder()
                             .articleId(oilArticle.getId())
@@ -68,7 +68,7 @@ public class OilArticleServiceImpl implements OilArticleService {
             );
         }
         String pubText2 = createReqVO.getPubText2();
-        if(StringUtils.isNotBlank(pubText2)) {
+        if (StringUtils.isNotBlank(pubText2)) {
             oilArticleDetailMapper.insert(
                     OilArticleDetailDO.builder()
                             .articleId(oilArticle.getId())
@@ -88,6 +88,90 @@ public class OilArticleServiceImpl implements OilArticleService {
         validateOilArticleExists(updateReqVO.getId());
         // 更新
         OilArticleDO updateObj = BeanUtils.toBean(updateReqVO, OilArticleDO.class);
+
+        String fthName = DictFrameworkUtils.parseDictDataLabel("article_type", updateReqVO.getFthId().toString());
+        updateReqVO.setFthName(fthName);
+        // 更新正文内容一
+        String pubText1 = updateReqVO.getPubText1();
+        OilArticleDetailDO oilArticleDetailDO1 = oilArticleDetailMapper.selectOne(
+                new LambdaQueryWrapperX<OilArticleDetailDO>()
+                        .eq(OilArticleDetailDO::getArticleId, updateReqVO.getId())
+                        .eq(OilArticleDetailDO::getArticleIndex, 1)
+        );
+        if (StringUtils.isNotBlank(pubText1)) {
+            if (oilArticleDetailDO1 != null) {
+                oilArticleDetailMapper.updateById(
+                        new OilArticleDetailDO().setId(oilArticleDetailDO1.getId())
+                                .setContent(pubText1));
+            } else {
+                oilArticleDetailMapper.insert(
+                        OilArticleDetailDO.builder()
+                                .articleId(updateReqVO.getId())
+                                .content(pubText1)
+                                .articleIndex(1)
+                                .secret(0)
+                                .build()
+                );
+            }
+        } else {
+            if (oilArticleDetailDO1 != null) {
+                oilArticleDetailMapper.deleteById(oilArticleDetailDO1.getId());
+            }
+        }
+
+        String priText1 = updateReqVO.getPriText1();
+        OilArticleDetailDO oilArticleDetailDO2 = oilArticleDetailMapper.selectOne(
+                new LambdaQueryWrapperX<OilArticleDetailDO>()
+                        .eq(OilArticleDetailDO::getArticleId, updateReqVO.getId())
+                        .eq(OilArticleDetailDO::getArticleIndex, 2)
+        );
+        if (StringUtils.isNotBlank(priText1)) {
+            if (oilArticleDetailDO2 != null) {
+                oilArticleDetailMapper.updateById(
+                        new OilArticleDetailDO().setId(oilArticleDetailDO2.getId())
+                                .setContent(priText1));
+            } else {
+                oilArticleDetailMapper.insert(
+                        OilArticleDetailDO.builder()
+                                .articleId(updateReqVO.getId())
+                                .content(priText1)
+                                .articleIndex(2)
+                                .secret(1)
+                                .build()
+                );
+            }
+        } else {
+            if (oilArticleDetailDO2 != null) {
+                oilArticleDetailMapper.deleteById(oilArticleDetailDO2.getId());
+            }
+        }
+
+        String pubText2 = updateReqVO.getPubText2();
+        OilArticleDetailDO oilArticleDetailDO3 = oilArticleDetailMapper.selectOne(
+                new LambdaQueryWrapperX<OilArticleDetailDO>()
+                        .eq(OilArticleDetailDO::getArticleId, updateReqVO.getId())
+                        .eq(OilArticleDetailDO::getArticleIndex, 3)
+        );
+        if (StringUtils.isNotBlank(pubText2)) {
+            if (oilArticleDetailDO3 != null) {
+                oilArticleDetailMapper.updateById(
+                        new OilArticleDetailDO().setId(oilArticleDetailDO3.getId())
+                                .setContent(pubText2));
+            } else {
+                oilArticleDetailMapper.insert(
+                        OilArticleDetailDO.builder()
+                                .articleId(updateReqVO.getId())
+                                .content(pubText2)
+                                .articleIndex(3)
+                                .secret(0)
+                                .build()
+                );
+            }
+        } else {
+            if (oilArticleDetailDO3 != null) {
+                oilArticleDetailMapper.deleteById(oilArticleDetailDO3.getId());
+            }
+        }
         oilArticleMapper.updateById(updateObj);
     }
 
@@ -100,12 +184,12 @@ public class OilArticleServiceImpl implements OilArticleService {
     }
 
     @Override
-        public void deleteOilArticleListByIds(List<Integer> ids) {
+    public void deleteOilArticleListByIds(List<Integer> ids) {
         // 校验存在
         validateOilArticleExists(ids);
         // 删除
         oilArticleMapper.deleteByIds(ids);
-        }
+    }
 
     private void validateOilArticleExists(List<Integer> ids) {
         List<OilArticleDO> list = oilArticleMapper.selectByIds(ids);

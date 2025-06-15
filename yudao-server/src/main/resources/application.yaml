@@ -12,8 +12,8 @@ spring:
   servlet:
     # 文件上传相关配置项
     multipart:
-      max-file-size: 16MB # 单个文件大小
-      max-request-size: 32MB # 设置总上传的文件大小
+      max-file-size: 200MB # 单个文件大小
+      max-request-size: 200MB # 设置总上传的文件大小
 
   # Jackson 配置项
   jackson:
@@ -316,3 +316,22 @@ debug: false
 # 插件配置 TODO 芋艿：【IOT】需要处理下
 pf4j:
   pluginsDir: /Users/anhaohao/code/gitee/ruoyi-vue-pro/plugins # 插件目录
+
+
+--- # 文件上传相关配置
+# 文件存储配置
+file:
+  path: /home/ruoyi/upload # 本地存储路径
+  url: http://localhost:8080/profile # 文件访问前缀
+#file:
+#  storage:
+#    type: s3                 # 存储类型（s3 表示 MinIO/AWS S3）
+#s3:
+#  endpoint: http://172.17.0.1:9000 #内网地址
+#  domain: https://file.smzg777.cn  #外网访问地址
+#  accessKey: 0r5ldiCCy75mEqA8aQ1A
+#  secretKey: L3nzRwuBStojpUfOXHy4Pt2fyQ37V2ino1SbiB4O
+#  bucketName: box-im
+#  imagePath: image
+#  filePath: file
+#  videoPath: video

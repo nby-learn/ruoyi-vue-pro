@@ -57,4 +57,8 @@ public class OilArticleRespVO {
     @Schema(description = "公开段落二", example = "赵六")
     private String pubText2;
 
+    private Boolean hasContent = false;
+
+    private String content = "";
+
 }

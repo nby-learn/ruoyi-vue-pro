@@ -176,6 +176,17 @@ public class OilArticleServiceImpl implements OilArticleService {
     }
 
     @Override
+    public void updateOilArticleStatus(OilArticleSaveReqVO updateReqVO) {
+
+        // 校验存在
+        validateOilArticleExists(updateReqVO.getId());
+        this.oilArticleMapper
+                .updateById(new OilArticleDO()
+                        .setId(updateReqVO.getId())
+                        .setStatus(updateReqVO.getStatus()));
+    }
+
+    @Override
     public void deleteOilArticle(Integer id) {
         // 校验存在
         validateOilArticleExists(id);

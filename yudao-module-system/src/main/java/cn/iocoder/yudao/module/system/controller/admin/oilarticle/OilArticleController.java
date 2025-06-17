@@ -44,6 +44,15 @@ public class OilArticleController {
         return success(oilArticleService.createOilArticle(createReqVO));
     }
 
+    @PutMapping("/updateStatus")
+    @Operation(summary = "更新文章")
+    @PreAuthorize("@ss.hasPermission('system:oil-article:update')")
+    @TenantIgnore
+    public CommonResult<Boolean> updateStatus(@Valid @RequestBody OilArticleSaveReqVO updateReqVO) {
+        oilArticleService.updateOilArticleStatus(updateReqVO);
+        return success(true);
+    }
+
     @PutMapping("/update")
     @Operation(summary = "更新文章")
     @PreAuthorize("@ss.hasPermission('system:oil-article:update')")

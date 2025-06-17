@@ -65,4 +65,10 @@ public interface OilArticleService {
     String getPubText2(Integer id);
 
     String getPriText2(Integer id);
+
+    /**
+     * 更改状态
+     * @param updateReqVO
+     */
+    void updateOilArticleStatus(@Valid OilArticleSaveReqVO updateReqVO);
 }

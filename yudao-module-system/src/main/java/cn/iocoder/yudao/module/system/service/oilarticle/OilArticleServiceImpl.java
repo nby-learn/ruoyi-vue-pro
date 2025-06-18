@@ -12,6 +12,7 @@ import cn.iocoder.yudao.module.system.dal.dataobject.oilarticledetail.OilArticle
 import cn.iocoder.yudao.module.system.dal.mysql.oilarticle.OilArticleMapper;
 import cn.iocoder.yudao.module.system.dal.mysql.oilarticledetail.OilArticleDetailMapper;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +29,7 @@ import static cn.iocoder.yudao.module.infra.enums.ErrorCodeConstants.OIL_ARTICLE
  */
 @Service
 @Validated
+@Slf4j
 public class OilArticleServiceImpl implements OilArticleService {
 
     @Resource
@@ -217,7 +219,20 @@ public class OilArticleServiceImpl implements OilArticleService {
 
     @Override
     public OilArticleDO getOilArticle(Integer id) {
-        return oilArticleMapper.selectById(id);
+        OilArticleDO oilArticleDO = oilArticleMapper.selectById(id);
+        try {
+            String clickCount = oilArticleDO.getClickCount();
+            int count = 0;
+            if (StringUtils.isBlank(clickCount)) {
+                count += 1;
+            } else {
+                count = Integer.parseInt(clickCount) + 1;
+            }
+            oilArticleDO.setClickCount((count + 1) + "");
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return oilArticleDO;
     }
 
     @Override
